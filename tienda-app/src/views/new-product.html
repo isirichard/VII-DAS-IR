@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add A New Product</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <!-- Formulario para el nuevo producto-->
+    <form action="" class="p-4">
+        <!-- Nombre-->
+        <div class="form-group">
+            <input type="text" id="name" class="form-control" placeholder="Product's Name" autofocus>
+        </div>
+        <!-- Precio-->
+        <div class="form-group">
+            <input type="text" id="price" class="form-control" placeholder="Price">
+
+        </div>
+        <!-- Descripción-->
+        <div class="form-group">
+            <input type="text" id="description" class="form-control" placeholder="Description">
+        </div>
+        <!-- Guardar-->
+        <button class="btn btn-primary btn-block">
+          Save Product
+        </button>
+
+    </form>
+    <!-- Código de JavaScript-->
+    <script>
+        //necesitamos sockets forma ipcRenderer si es otra ventana
+        const {
+            ipcRenderer
+        } = require('electron');
+        //selecciono formulario y escucho guardar
+        const form = document.querySelector('form');
+        form.addEventListener('submit', e => {
+            //capturar los valores al dar guardar
+            const nameProduct = document.querySelector('#name').value;
+            const priceProduct = document.querySelector('#price').value;
+            const descProduct = document.querySelector('#description').value;
+            const newProduct = {
+                name: nameProduct,
+                price: priceProduct,
+                description: descProduct
+            };
+            //main process y renderer process comunicación sockets
+            //enviar  =  send
+            ipcRenderer.send('product:new', newProduct);
+            //sin refrescar
+            e.preventDefault();
+        })
+    </script>
+
+</body>
+
+</html>

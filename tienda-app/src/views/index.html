@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Products Electron</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container p-4">
+        <!-- contenido para los nuevos productoss-->
+        <div class="row" id="products"></div>
+    </div>
+
+
+    <script>
+        const {
+            ipcRenderer
+        } = require('electron');
+        const products = document.querySelector('#products');
+
+        //main process y renderer process comunicación sockets
+        ipcRenderer.on('product:new', (e, newProduct) => {
+            //crear una tarjeta
+            const newProductTemplate = `
+              <div class="col-xs-4 p-2">
+                <div class="card text-center">
+                  <div class="card-header">
+                    <h5 class="card-title">${newProduct.name}</h5>
+                    </div>
+                  <div class="card-body">
+                      ${newProduct.description}
+                      <hr/>
+                      ${newProduct.price}
+                    </div>
+                  <div class="card-footer">
+                      <button class="btn btn-danger btn-sm">
+                        DELETE
+                        </button>
+                    </div>
+                </div>
+              </div>
+            `;
+            products.innerHTML += newProductTemplate;
+            //dar funcionalidad del boton eliminar
+            const btns = document.querySelectorAll('.btn.btn-danger');
+            btns.forEach(btn => {
+                //agregar escucha a cada boton
+                btn.addEventListener('click', e => {
+                    //jerarquía de DOOM para eliminar el contener hasta llegar a la tarjeta
+                    e.target.parentElement.parentElement.parentElement.remove();
+                })
+            })
+
+        });
+
+        //main process y renderer process comunicación sockets
+        ipcRenderer.on('products:remove-all', (e) => {
+            products.innerHTML = '';
+        });
+    </script>
+</body>
+
+</html>
