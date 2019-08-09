@@ -4,6 +4,33 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
 
+//NeDB una base de datos ligera
+const Datastore = require('nedb'),
+    db = new Datastore();
+
+const producto = {
+    name: 'helado',
+    precio: 1.20
+};
+
+// db.insert(producto, function(err, newrec) {
+//     if (err) {
+//         console.log('No me conecte');
+//         throw err;
+//     }
+//     console.log('Ingreso dato satisfactoriamente');
+//     console.log(newrec);
+// });
+
+db.find({ name: 'helado' }, function(err, docs) {
+    if (err) {
+        console.log('No me conecte');
+        throw err;
+    }
+    console.log('Busqueda satisfactoria');
+    console.log(docs);
+});
+
 //Electron reload - refrescar views
 if (process.env.NODE_ENV !== 'production') {
     require('electron-reload')(__dirname, {
