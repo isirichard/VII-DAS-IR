@@ -5,8 +5,12 @@ const url = require('url');
 const path = require('path');
 
 //NeDB una base de datos ligera
-const Datastore = require('nedb'),
-    db = new Datastore();
+// const Datastore = require('nedb'),
+//     db = new Datastore();
+
+//NeDB persistente
+var Datastore = require('nedb'),
+    db = new Datastore({ filename: 'BaseDatosTienda', autoload: true });
 
 const producto = {
     name: 'helado',
@@ -22,14 +26,15 @@ const producto = {
 //     console.log(newrec);
 // });
 
-db.find({ name: 'helado' }, function(err, docs) {
-    if (err) {
-        console.log('No me conecte');
-        throw err;
-    }
-    console.log('Busqueda satisfactoria');
-    console.log(docs);
-});
+
+// db.find({ name: 'helado' }, function(err, docs) {
+//     if (err) {
+//         console.log('No me conecte');
+//         throw err;
+//     }
+//     console.log('Busqueda satisfactoria');
+//     console.log(docs);
+// });
 
 //Electron reload - refrescar views
 if (process.env.NODE_ENV !== 'production') {
