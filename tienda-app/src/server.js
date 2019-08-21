@@ -94,7 +94,10 @@ const templateMenu = [{
         click() {
             app.quit();
         }
-    }]
+    }],
+    label: 'Product',
+    label: 'Category',
+    label: 'User'
 }];
 
 function createNewProductWindow() {
