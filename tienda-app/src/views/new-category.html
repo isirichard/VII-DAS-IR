@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add A New Category</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+</head>
+
+<body>
+    <form action="" class="p-4">
+        <!-- Nombre-->
+        <div class="form-group">
+            <input type="text" id="name" class="form-control" placeholder="Category's Name" autofocus>
+        </div>
+        <!-- Descripción-->
+        <div class="form-group">
+            <input type="text" id="description" class="form-control" placeholder="Description (opcional)">
+        </div>
+        <!-- Guardar-->
+        <button class="btn btn-primary btn-info" id="crear">
+          Crear
+        </button>
+        <!-- Guardar-->
+        <button class="btn btn-primary btn-info" id="limpiar">
+          Limpiar
+        </button>
+        <!-- Guardar-->
+        <button class="btn btn-primary btn-info" id="cancelar">
+          Cancelar
+        </button>
+    </form>
+
+    <script>
+        //necesitamos sockets forma ipcRenderer si es otra ventana
+        const {
+            ipcRenderer
+        } = require('electron');
+
+
+        //selecciono formulario y escucho guardar
+        const bcrear = document.querySelector('#crear');
+        bcrear.addEventListener('click', e => {
+            //capturar los valores al dar guardar
+            const nameCategory = document.querySelector('#name').value;
+            const descCategory = document.querySelector('#description').value;
+
+            const newCategory = {
+                name: nameCategory,
+                description: descCategory
+            };
+            //main process y renderer process comunicación sockets
+            //enviar  =  send
+
+            ipcRenderer.send('category:new', newCategory);
+            //sin refrescar
+            console.log(newCategory);
+            e.preventDefault();
+
+        });
+    </script>
+
+
+</body>
+
+
+</html>

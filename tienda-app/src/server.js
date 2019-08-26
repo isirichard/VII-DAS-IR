@@ -45,6 +45,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 let mainWindow
 let newProductWindow
+let newCategoryWindow
 
 //Ventaja Principal
 app.on('ready', () => {
@@ -71,11 +72,28 @@ ipcMain.on('product:new', (e, newProduct) => {
     //enviar al index.html = mainWindow.webContents
     mainWindow.webContents.send('product:new', newProduct);
     newProductWindow.close();
-})
+});
+
+ipcMain.on('category:new', (e, newProduct) => {
+    //enviar al index.html = mainWindow.webContents
+    mainWindow.webContents.send('product:new', newProduct);
+    newProductWindow.close();
+});
 
 
 const templateMenu = [{
     label: 'File',
+    submenu: [{
+        //darwin es igual mac
+        label: 'Exit',
+        accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+        click() {
+            app.quit();
+        }
+    }],
+
+}, {
+    label: 'Product',
     submenu: [{
         label: 'New Product',
         accelerator: 'Ctrl+N',
@@ -87,17 +105,20 @@ const templateMenu = [{
         click() {
             mainWindow.webContents.send('products:remove-all');
         }
-    }, {
-        //darwin es igual mac
-        label: 'Exit',
-        accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
-        click() {
-            app.quit();
-        }
     }],
-    label: 'Product',
+
+}, {
     label: 'Category',
+    submenu: [{
+        label: 'New Category',
+        click() {
+            createNewCategoryWindow()
+        }
+    }]
+
+}, {
     label: 'User'
+
 }];
 
 function createNewProductWindow() {
@@ -119,6 +140,23 @@ function createNewProductWindow() {
         newProductWindow = null;
     });
 }
+
+function createNewCategoryWindow() {
+    newCategoryWindow = new BrowserWindow({
+        width: 420,
+        height: 330,
+        title: 'Add a New Category'
+    });
+    newCategoryWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'views/new-category.html'),
+        protocol: 'file',
+        slashes: true
+    }));
+    newCategoryWindow.on('close', () => {
+        newCategoryWindow = null;
+    });
+}
+
 //si estamos en mac aparecera una pestaña sino por default
 if (process.platform === 'darwin') {
     templateMenu.unshift({
