@@ -14,7 +14,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "electron": "^4.1.4",
+        "electron": "^18.3.7",
         "electron-packager": "^13.1.1",
         "electron-reload": "^1.4.0",
         "nedb": "^1.8.0"
